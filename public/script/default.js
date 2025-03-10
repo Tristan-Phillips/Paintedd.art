@@ -255,8 +255,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // =====================
   // Artistic Randomization
   // =====================
-  document.querySelectorAll(".nav-item").forEach((item) => {
-    const rotation = Math.random() * 10 - 5; // -5° to +5°
-    item.style.transform = `rotate(${rotation}deg)`;
-  });
+//   document.querySelectorAll(".nav-item").forEach((item) => {
+//     const rotation = Math.random() * 10 - 5; // -5° to +5°
+//     item.style.transform = `rotate(${rotation}deg)`;
+//   });
 });

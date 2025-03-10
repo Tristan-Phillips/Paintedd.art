@@ -27,7 +27,6 @@ body {
 .chaos-header {
   overflow: hidden;
   position: relative;
-  border-bottom: 3px solid var(--artery-red);
   z-index: 100;
 }
 
@@ -35,7 +34,7 @@ body {
   position: absolute;
   bottom: -20px;
   left: 50%;
-  width: 100%;
+  width: 120%;
   height: 60px;
   background: var(--artery-red);
   clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
