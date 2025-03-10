@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Burn Overlay</title>
+    <style>
+        :root {
+            --void-black: #0A0A0A;
+            --artery-red: #D90429;
+            --flame-orange: #FF6B35;
+            --gold-embers: #FFD700;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+            font-family: 'Rubik Mono One', sans-serif;
+            height: 100vh;
+        }
+
+        /* Phase 1: Countdown Overlay */
+        .burn-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .burn-overlay.active {
+            opacity: 1;
+        }
+
+        /* Phase 1 Elements */
+        .flame-wall {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top,
+                var(--artery-red),
+                var(--flame-orange),
+                var(--gold-embers));
+            animation: flame-dance 0.1s infinite;
+            mask-image: linear-gradient(to top, transparent 10%, black 100%);
+        }
+
+        .burn-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            text-shadow: 0 0 20px var(--artery-red);
+            z-index: 2;
+        }
+
+        /* Phase 2: Active Burning Borders */
+        .burn-borders {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .burn-borders::before,
+        .burn-borders::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(90deg,
+                var(--artery-red),
+                var(--flame-orange),
+                var(--gold-embers));
+            animation: border-burn 2s linear infinite;
+        }
+
+        .burn-borders::before {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            mask-image: linear-gradient(to right, 
+                transparent 10%, 
+                black 30%, 
+                black 70%, 
+                transparent 90%);
+        }
+
+        .burn-borders::after {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            mask-image: linear-gradient(to right, 
+                transparent 10%, 
+                black 30%, 
+                black 70%, 
+                transparent 90%);
+        }
+
+        .warning-text {
+            color: var(--flame-orange);
+            font-size: 4rem;
+            animation: pulse 1s infinite;
+            text-transform: uppercase;
+        }
+
+        .countdown {
+            color: white;
+            font-size: 5rem;
+            margin-top: 20px;
+        }
+
+        .ember {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--flame-orange);
+            border-radius: 50%;
+            animation: ember-rise 3s linear forwards;
+        }
+
+        @keyframes flame-dance {
+            0% { transform: scaleY(1); opacity: 0.8; }
+            50% { transform: scaleY(1.2); opacity: 1; }
+            100% { transform: scaleY(1); opacity: 0.8; }
+        }
+
+        @keyframes border-burn {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        @keyframes ember-rise {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(10vw); opacity: 0; }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+    </style>
+</head>
+<body>
+    <!-- Phase 1: Countdown Overlay -->
+    <div class="burn-overlay" id="burnOverlay">
+        <div class="burn-warning">
+            <div class="warning-text">Artwork Condemned</div>
+            <div class="countdown" id="countdown">5:00</div>
+        </div>
+    </div>
+
+    <!-- Phase 2: Burning Borders -->
+    <div class="burn-borders" id="burnBorders"></div>
+
+    <script>
+        // Configuration
+        const BURN_DURATION = 300; // 5 minutes in seconds
+        let timer = BURN_DURATION;
+        let emberInterval;
+
+        function updateTimer() {
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            document.getElementById('countdown').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if(timer <= 0) {
+                startBurnBorders();
+            } else {
+                timer--;
+            }
+        }
+
+        function createEmber() {
+            const ember = document.createElement('div');
+            ember.className = 'ember';
+            ember.style.left = Math.random() * 100 + 'vw';
+            ember.style.opacity = Math.random() * 0.7;
+            document.body.appendChild(ember);
+
+            setTimeout(() => ember.remove(), 3000);
+        }
+
+        function startBurnSequence() {
+            document.getElementById('burnOverlay').classList.add('active');
+            timer = BURN_DURATION;
+            emberInterval = setInterval(createEmber, 100);
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function startBurnBorders() {
+            // Transition to border effect
+            document.getElementById('burnOverlay').classList.remove('active');
+            document.getElementById('burnBorders').style.opacity = '1';
+
+            // Intensify ember effect
+            clearInterval(emberInterval);
+            emberInterval = setInterval(() => {
+                createEmber();
+                if(Math.random() > 0.7) createEmber(); // 70% chance for double embers
+            }, 75);
+        }
+
+        function stopBurnSequence() {
+            document.getElementById('burnOverlay').classList.remove('active');
+            document.getElementById('burnBorders').style.opacity = '0';
+            clearInterval(emberInterval);
+        }
+        
+        startBurnSequence();
+    </script>
+</body>
+</html>

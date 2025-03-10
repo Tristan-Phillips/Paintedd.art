@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Art Preserved</title>
+    <style>
+        :root {
+            --protective-blue: #42a5f5;
+            --sanctuary-gold: #ffd700;
+            --void-black: #0A0A0A;
+            --glow-intensity: 0 0 30px;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+            height: 100vh;
+            font-family: 'Cinzel Decorative', cursive;
+        }
+
+        .sanctuary-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            opacity: 1;
+            animation: sanctuary-fade 8s forwards;
+        }
+
+        .protective-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 39px,
+                    var(--protective-blue) 40px,
+                    transparent 41px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0px,
+                    transparent 39px,
+                    var(--protective-blue) 40px,
+                    transparent 41px
+                );
+            animation: grid-pulse 1.5s infinite;
+            opacity: 0.8;
+        }
+
+        .holy-emblem {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12rem;
+            color: var(--sanctuary-gold);
+            filter: drop-shadow(0 0 30px rgba(66, 165, 245, 0.7));
+            animation: emblem-float 3s ease-in-out infinite;
+        }
+
+        .preservation-text {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: var(--sanctuary-gold);
+            text-align: center;
+            text-shadow: var(--glow-intensity) var(--protective-blue);
+            animation: text-emerge 2s ease-out;
+            white-space: nowrap;
+        }
+
+        .ancient-runes {
+            position: absolute;
+            font-size: 3rem;
+            color: var(--sanctuary-gold);
+            opacity: 0.5;
+            animation: rune-drift 25s linear infinite;
+        }
+
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        @keyframes emblem-float {
+            0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+            50% { transform: translate(-50%, -50%) scale(1.15) rotate(5deg); }
+        }
+
+        @keyframes text-emerge {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        @keyframes rune-drift {
+            from { transform: translateY(-100%) rotate(0deg); }
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @keyframes sanctuary-fade {
+            0% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&display=swap');
+    </style>
+</head>
+<body>
+    <div class="sanctuary-overlay">
+        <div class="protective-grid"></div>
+        <div class="holy-emblem">🛡</div>
+        <div class="preservation-text">ART PRESERVED FROM FLAMES</div>
+
+        <!-- Floating runes -->
+        <div class="ancient-runes" style="left:10%; animation-delay:-5s">ᛉ</div>
+        <div class="ancient-runes" style="left:30%; animation-delay:-8s">ᛞ</div>
+        <div class="ancient-runes" style="left:50%; animation-duration:30s">ᚨ</div>
+        <div class="ancient-runes" style="left:70%; animation-delay:-12s">ᛝ</div>
+        <div class="ancient-runes" style="left:90%; animation-delay:-15s">ᛏ</div>
+    </div>
+
+    <script>
+        // Auto-create floating runes
+        function createRunes() {
+            const runes = ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ', 'ᚱ', 'ᚲ', 'ᚷ', 'ᚹ', 'ᚺ', 'ᚻ', 'ᚾ', 'ᛁ', 'ᛃ'];
+            const container = document.querySelector('.sanctuary-overlay');
+
+            for(let i = 0; i < 20; i++) {
+                const rune = document.createElement('div');
+                rune.className = 'ancient-runes';
+                rune.textContent = runes[Math.floor(Math.random() * runes.length)];
+                rune.style.left = Math.random() * 100 + '%';
+                rune.style.animationDelay = -Math.random() * 25 + 's';
+                rune.style.fontSize = (2 + Math.random() * 4) + 'rem';
+                rune.style.opacity = 0.3 + Math.random() * 0.3;
+                container.appendChild(rune);
+            }
+        }
+
+        // Start everything immediately
+        window.onload = createRunes;
+    </script>
+</body>
+</html>

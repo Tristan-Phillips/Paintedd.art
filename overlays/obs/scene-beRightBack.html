@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>painted_d - TEMPORARY SUSPENSION</title>
+    <style>
+        :root {
+            --void-black: #0A0A0A;
+            --artery-red: #D90429;
+            --canvas-white: #F8F9FA;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Rubik Mono One', sans-serif;
+            color: var(--canvas-white);
+            background: rgba(10, 10, 10, 0.95);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .fire-border {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg,
+                transparent 45%,
+                rgba(217,4,41,0.1) 50%,
+                transparent 55%);
+            animation: burn-edge 2s infinite;
+            pointer-events: none;
+        }
+
+        .main-message {
+            z-index: 2;
+            text-shadow: 0 0 20px rgba(217,4,41,0.5);
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: var(--artery-red);
+            text-transform: uppercase;
+        }
+
+        .countdown {
+            font-size: 5rem;
+            margin: 2rem 0;
+            letter-spacing: -0.3rem;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(248,249,250,0.1);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-fire {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to right,
+                var(--void-black),
+                var(--artery-red));
+            animation: progress-burn 15s infinite linear;
+        }
+
+        .social-links {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--canvas-white);
+            font-size: 2rem;
+            transition: 0.3s all ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--artery-red);
+            transform: scale(1.2);
+        }
+
+        @keyframes burn-edge {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes progress-burn {
+            0% { width: 0%; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; width: 100%; }
+            100% { opacity: 0; width: 100%; }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Mono&display=swap');
+    </style>
+</head>
+<body>
+    <div class="fire-border"></div>
+
+    <div class="main-message">
+        <h1>RITUAL PAUSED</h1>
+        <div class="countdown" id="countdown">00:00</div>
+        <p>Paintedd will return to complete<br>the creation/destruction cycle soon</p>
+        <div class="progress-bar">
+            <div class="progress-fire"></div>
+        </div>
+    </div>
+
+    <div class="social-links">
+        <a href="https://www.tiktok.com/@paintedd.store" target="_blank">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.twitch.tv/painted_d" target="_blank">
+            <i class="fab fa-twitch"></i>
+        </a>
+    </div>
+
+    <script>
+        // Animated timer
+        let seconds = 0;
+        const countdownElement = document.getElementById('countdown');
+
+        setInterval(() => {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            countdownElement.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Add dynamic embers
+        function createEmber() {
+            const ember = document.createElement('div');
+            ember.style.position = 'fixed';
+            ember.style.width = '2px';
+            ember.style.height = '2px';
+            ember.style.background = 'var(--artery-red)';
+            ember.style.borderRadius = '50%';
+            ember.style.left = Math.random() * 100 + '%';
+            ember.style.animation = `ember-rise ${5 + Math.random() * 5}s linear`;
+            document.body.appendChild(ember);
+
+            setTimeout(() => ember.remove(), 6000);
+        }
+
+        setInterval(createEmber, 300);
+
+        // Add ember animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ember-rise {
+                0% { 
+                    transform: translateY(100vh) scale(1);
+                    opacity: 0.8; 
+                }
+                100% { 
+                    transform: translateY(-100vh) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="https://kit.fontawesome.com/29c25c094f.js" crossorigin="anonymous"></script>
+</body>
+</html>
