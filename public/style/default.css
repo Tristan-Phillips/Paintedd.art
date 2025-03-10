@@ -375,6 +375,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
+  padding-bottom: 50px;
 }
 
 .manifesto-text {
