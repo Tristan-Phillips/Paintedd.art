@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Save Banner</title>
+    <style>
+        :root {
+            --artery-red: #D90429;
+            --canvas-white: #F8F9FA;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+            height: 100vh;
+        }
+
+        .scrolling-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(10, 10, 10, 0.9);
+            border-top: 2px solid var(--artery-red);
+            border-bottom: 2px solid var(--artery-red);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .scrolling-text {
+            color: var(--canvas-white);
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            line-height: 40px;
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 15s linear infinite;
+            text-shadow: 0 0 10px rgba(217, 4, 41, 0.5);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="scrolling-banner">
+        <div class="scrolling-text">
+            🔥 SAVE FROM FLAMES - $150 🔥 BURNING AT STREAM END 🔥
+        </div>
+    </div>
+</body>
+</html>
