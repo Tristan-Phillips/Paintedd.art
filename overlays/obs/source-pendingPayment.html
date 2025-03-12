@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>painted_d - PAYMENT CONJURATION</title>
+    <style>
+        :root {
+            --void-black: #0A0A0A;
+            --artery-red: #D90429;
+            --canvas-white: #F8F9FA;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Rubik Mono One', sans-serif;
+            color: var(--canvas-white);
+            background: transparent;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .blood-contract {
+            position: relative;
+            padding: 2rem;
+            border: 3px solid var(--artery-red);
+            background: rgba(10, 10, 10, 0.9);
+            max-width: 600px;
+            margin: 20px;
+            box-shadow: 0 0 50px rgba(217,4,41,0.2);
+        }
+
+        .countdown {
+            font-size: 4rem;
+            margin: 1rem 0;
+            color: var(--artery-red);
+            text-shadow: 0 0 20px rgba(217,4,41,0.5);
+        }
+
+        .payment-ribbon {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--artery-red);
+            padding: 0.5rem 2rem;
+            font-size: 1.2rem;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            opacity: 0.8;
+        }
+
+        .payment-option {
+            padding: 1rem;
+            border: 2px solid rgba(217,4,41,0.3);
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(217,4,41,0.2);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .progress-blood {
+            position: absolute;
+            height: 100%;
+            background: var(--artery-red);
+            width: 100%;
+            animation: blood-drain 600s linear forwards;
+        }
+
+        @keyframes blood-drain {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .expired {
+            display: none;
+            color: var(--artery-red);
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        .qr-code {
+            margin: 1rem auto;
+            padding: 1rem;
+            background: rgba(255,255,255,0.9);
+            width: 150px;
+            pointer-events: none;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+    </style>
+</head>
+<body>
+    <div class="blood-contract">
+        <div class="payment-ribbon">BINDING AGREEMENT</div>
+
+        <h1>PAYMENT SUMMONING</h1>
+        <div class="countdown" id="countdown">10:00</div>
+
+        <div class="progress-bar">
+            <div class="progress-blood"></div>
+        </div>
+
+        <p>Secure your artwork</p>
+
+        <div class="payment-methods">
+            <div class="payment-option">
+                <i class="fas fa-coffee"></i>
+                <div>ko-fi.com/paintedd</div>
+            </div>
+            <div class="payment-option">
+                <i class="fab fa-paypal"></i>
+                <div>paypal.me/paintdd</div>
+            </div>
+            <div class="payment-option">
+                <i class="fa-solid fa-r"></i>
+                <div>revolut.me/paintedd</div>
+            </div>
+
+        </div>
+
+        <div class="expired" id="expired">
+            CONTRACT VOID - TIME EXPIRED
+        </div>
+    </div>
+
+    <script>
+        // 10 minute countdown
+        let timeLeft = 600;
+        const countdownElement = document.getElementById('countdown');
+        const expiredElement = document.getElementById('expired');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = formatTime(timeLeft);
+
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                document.querySelector('.progress-blood').style.animation = 'none';
+                document.querySelector('.blood-contract').style.borderColor = '#333';
+                expiredElement.style.display = 'block';
+                countdownElement.style.display = 'none';
+            }
+        }, 1000);
+    </script>
+    <script src="https://kit.fontawesome.com/29c25c094f.js" crossorigin="anonymous"></script>
+</body>
+</html>
