@@ -3,7 +3,7 @@ function updateInfernoCountdown() {
   const nextBurn = new Date();
 
   // Set to next Wednesday 20:00 GMT+2
-  nextBurn.setUTCHours(18 - 2, 0, 0, 0);
+  nextBurn.setUTCHours(18, 0, 0, 0);
   nextBurn.setDate(now.getDate() + ((3 + 7 - now.getDay()) % 7));
 
   if (now > nextBurn) nextBurn.setDate(nextBurn.getDate() + 7);
