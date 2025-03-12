@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TikTok Burn Overlay</title>
+    <style>
+        :root {
+            --void-black: #0A0A0A;
+            --artery-red: #D90429;
+            --flame-orange: #FF6B35;
+            --gold-embers: #FFD700;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+            font-family: 'Rubik Mono One', sans-serif;
+            width: 1080px;
+            height: 1920px;
+            position: relative;
+        }
+
+        .burn-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .burn-overlay.active {
+            opacity: 1;
+        }
+
+        .burn-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            text-shadow: 0 0 20px var(--artery-red);
+            z-index: 2;
+        }
+
+        .burn-borders {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .burn-borders::before,
+        .burn-borders::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(180deg,
+                var(--artery-red),
+                var(--flame-orange),
+                var(--gold-embers));
+            animation: border-burn 2s linear infinite;
+        }
+
+        .burn-borders::before { left: 0; }
+        .burn-borders::after { right: 0; }
+
+        .warning-text {
+            color: var(--flame-orange);
+            font-size: 3rem;
+            animation: pulse 1s infinite;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .countdown {
+            color: white;
+            font-size: 4rem;
+            margin-top: 15px;
+        }
+
+        .ember {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--flame-orange);
+            border-radius: 50%;
+            animation: ember-rise 3s linear forwards;
+        }
+
+        @keyframes border-burn {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        @keyframes ember-rise {
+            0% { transform: translateY(1920px) translateX(5vw); opacity: 1; }
+            100% { transform: translateY(-1920px) translateX(-5vw); opacity: 0; }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+    </style>
+</head>
+<body>
+    <div class="burn-overlay" id="burnOverlay">
+        <div class="burn-warning">
+            <div class="warning-text">Artwork Condemned</div>
+            <div class="countdown" id="countdown">5:00</div>
+        </div>
+    </div>
+
+    <div class="burn-borders" id="burnBorders"></div>
+
+    <script>
+        const BURN_DURATION = 30;
+        let timer = BURN_DURATION;
+        let emberInterval;
+
+        function updateTimer() {
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            document.getElementById('countdown').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            timer <= 0 ? startBurnBorders() : timer--;
+        }
+
+        function createEmber() {
+            const ember = document.createElement('div');
+            ember.className = 'ember';
+            ember.style.left = `${Math.random() * 100}%`;
+            ember.style.opacity = Math.random() * 0.5;
+            document.body.appendChild(ember);
+            setTimeout(() => ember.remove(), 3000);
+        }
+
+        function startBurnSequence() {
+            document.getElementById('burnOverlay').classList.add('active');
+            timer = BURN_DURATION;
+            emberInterval = setInterval(createEmber, 150);
+            setInterval(updateTimer, 1000);
+        }
+
+        function startBurnBorders() {
+            document.getElementById('burnOverlay').classList.remove('active');
+            document.getElementById('burnBorders').style.opacity = '1';
+            clearInterval(emberInterval);
+            emberInterval = setInterval(() => {
+                createEmber();
+                if(Math.random() > 0.6) createEmber();
+            }, 100);
+        }
+
+        startBurnSequence();
+    </script>
+</body>
+</html>
