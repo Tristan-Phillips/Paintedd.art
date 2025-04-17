@@ -2,14 +2,16 @@ function updateInfernoCountdown() {
     const now = new Date();
     const nextBurn = new Date();
 
-    // Set to today 20:00 GMT+2
+    // Set to 20:00 GMT+2 on 2025-04-23
+    nextBurn.setUTCFullYear(2025, 3, 23);
     nextBurn.setUTCHours(18, 0, 0, 0);
-    nextBurn.setDate(now.getDate());
 
     if (now > nextBurn) {
-        // If it's past 20:00 today, set to next Wednesday 20:00 GMT+2
-        nextBurn.setDate(now.getDate() + ((3 + 7 - now.getDay()) % 7));
+        const daysUntilNextWednesday = (3 + 7 - now.getUTCDay()) % 7 || 7;
+        nextBurn.setDate(now.getDate() + daysUntilNextWednesday);
         nextBurn.setUTCHours(18, 0, 0, 0);
+
+        console.log("Next burn time set to:", nextBurn.toISOString());
     }
 
     const diff = nextBurn - now;
